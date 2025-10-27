@@ -15,7 +15,7 @@ from app.db.session import close_db, engine
 from app.middleware.request_id import RequestIDMiddleware
 from app.middleware.timing import TimingMiddleware
 
-
+from sqlalchemy import text
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Gestionnaire de cycle de vie (startup/shutdown)."""
@@ -27,7 +27,7 @@ async def lifespan(app: FastAPI):
     # Test connexion DB
     try:
         async with engine.connect() as conn:
-            await conn.execute("SELECT 1")
+            await conn.execute(text("SELECT 1"))
         logger.info("✅ Connexion DB OK")
     except Exception as e:
         logger.error(f"❌ Erreur connexion DB: {e}")
